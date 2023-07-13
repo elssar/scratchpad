@@ -4,19 +4,24 @@ use std::{
 };
 
 use num::{
-    Signed,
     integer::gcd,
 };
 
+fn reduce(num: i64, den: i64) -> (i64, i64) {
+    let div = gcd(num, den);
+
+    return (num / div, den / div);
+}
+
 #[derive(Debug, PartialEq, Eq)]
-pub struct Fraction<T: Signed> {
-    numerator: T,
-    denominator: T,
+pub struct Fraction {
+    numerator: i64,
+    denominator: i64,
     sign: i8
 }
 
-impl<T: Signed> Fraction<T> {
-    pub fn new(numerator: T, denominator: T) -> Fraction<T> {
+impl Fraction {
+    pub fn new(numerator: i64, denominator: i64) -> Fraction {
        let mut sign: i8 = 1;
 
        if numerator.abs() != numerator {
@@ -27,13 +32,13 @@ impl<T: Signed> Fraction<T> {
            sign *= -1;
        }
 
+       let reduced = reduce(numerator.abs(), denominator.abs());
+
        let fraction = Fraction {
-           numerator: numerator.abs(),
-           denominator: denominator.abs(),
+           numerator: reduced.0,
+           denominator: reduced.1,
            sign: sign
        };
-
-       fraction.reduce();
 
        fraction
     }
@@ -46,8 +51,8 @@ impl<T: Signed> Fraction<T> {
     }
 }
 
-impl<T: Signed> Default for Fraction<T> {
-    fn default() -> Fraction<T> {
+impl Default for Fraction {
+    fn default() -> Fraction {
         Fraction {
             numerator: 1,
             denominator: 1,
@@ -56,14 +61,14 @@ impl<T: Signed> Default for Fraction<T> {
     }
 }
 
-impl<T: Signed> fmt::Display for Fraction<T> {
+impl fmt::Display for Fraction {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}/{}", self.numerator, self.denominator)
     }
 }
 
-impl<T: Signed> ops::Add for Fraction<T> {
-    type Output = Fraction<T>;
+impl ops::Add for Fraction {
+    type Output = Fraction;
 
     fn add(self, rhs: Self) -> Self {
         let d = self.denominator * rhs.denominator;
@@ -75,7 +80,7 @@ impl<T: Signed> ops::Add for Fraction<T> {
 
 #[test]
 fn test_fraction_reduce() {
-    let mut f1 = Fraction::new("2/4");
+    let mut f1 = Fraction::new(2, 4);
 
     f1.reduce();
     assert_eq!(f1.numerator, 1);
@@ -84,10 +89,10 @@ fn test_fraction_reduce() {
 
 #[test]
 fn test_fraction_add() {
-    let f1 = Fraction::new("1/2");
-    let f2 = Fraction::new("2/3");
+    let f1 = Fraction::new(1, 3);
+    let f2 = Fraction::new(2, 3);
     let f3 = f1 + f2;
 
-    assert_eq!(f3.numerator, 7);
-    assert_eq!(f3.denominator, 6);
+    assert_eq!(f3.numerator, 1);
+    assert_eq!(f3.denominator, 1);
 }
