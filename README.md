@@ -7,6 +7,4 @@ Random, fun experiments in different langauges and runtimes.
 
 - [Rust](runtimes/rust)
 - [Deno](runtimes/deno)
-- [Python 3](runtimes/python3)
-- [Node JS](runtimes/nodejs)
 
