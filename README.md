@@ -1,7 +1,7 @@
-# MEwC
-## My Experiments with Code
+# Scratchpad
+## Random Experiments in Code
 
-Random, fun experiments in different langauges and runtimes.
+Random, fun coding experiments in different langauges and runtimes.
 
 ### Runtimes
 
